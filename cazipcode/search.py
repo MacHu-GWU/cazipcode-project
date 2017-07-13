@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import random
 import heapq
 from math import radians, cos
 from functools import total_ordering
@@ -195,8 +196,6 @@ class SearchEngine(object):
         else:
             raise ValueError("lat, lng, radius has to be all given or not.")
 
-        # elevation
-
         # prefix
         if prefix is not None:
             if not isinstance(prefix, string_types):
@@ -310,7 +309,7 @@ class SearchEngine(object):
             # sort_by given, then sort by keyword
             if sort_by:
                 result = list()
-                for row in engine.execute(sql):
+                for row in self.connect.execute(sql):
                     dist = great_circle(
                         (lat, lng), (row.latitude, row.longitude))
                     if dist <= radius:
@@ -321,7 +320,7 @@ class SearchEngine(object):
             # sort_by not given, then sort by distance, don't use limit clause
             else:
                 heap = list()
-                for row in engine.execute(sql):
+                for row in self.connect.execute(sql):
                     # 43.959918, 46.995828, -77.885944, -73.556256
                     dist = great_circle(
                         (lat, lng), (row.latitude, row.longitude))
@@ -346,7 +345,8 @@ class SearchEngine(object):
                 sql = sql.order_by(clause)
 
             sql = sql.limit(returns)
-            result = [PostalCode._make(row) for row in engine.execute(sql)]
+            result = [PostalCode._make(row)
+                      for row in self.connect.execute(sql)]
 
         return result
 
@@ -354,64 +354,88 @@ class SearchEngine(object):
              sort_by=fields.postalcode,
              ascending=True,
              returns=DEFAULT_LIMIT):
-        return self.find(lat=lat, lng=lng, radius=radius,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            lat=lat, lng=lng, radius=radius,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
+
+    def by_postalcode(self, postalcode):
+        """Find exact postal code.
+        """
+        sql = select([t]).where(t.c.postalcode == postalcode.strip().upper())
+        try:
+            postalcode = PostalCode._make(self.connect.execute(sql).fetchone())
+            return postalcode
+        except:
+            raise ValueError("Can not find '%s'!" % postalcode)
 
     def by_prefix(self, prefix,
                   sort_by=fields.postalcode,
                   ascending=True,
                   returns=DEFAULT_LIMIT):
-        return self.find(prefix=prefix,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            prefix=prefix,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_substring(self, substring,
                      sort_by=fields.postalcode,
                      ascending=True,
                      returns=DEFAULT_LIMIT):
-        return self.find(substring=substring,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            substring=substring,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_province(self, province,
                     sort_by=fields.postalcode,
                     ascending=True,
                     returns=DEFAULT_LIMIT):
-        return self.find(province=province,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            province=province,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_city(self, city,
                 sort_by=fields.postalcode,
                 ascending=True,
                 returns=DEFAULT_LIMIT):
-        return self.find(city=city,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            city=city,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_area_name(self, area_name,
                      sort_by=fields.postalcode,
                      ascending=True,
                      returns=DEFAULT_LIMIT):
-        return self.find(area_name=area_name,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            area_name=area_name,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_area_code(self, area_code,
                      sort_by=fields.postalcode,
                      ascending=True,
                      returns=DEFAULT_LIMIT):
-        return self.find(area_code=area_code,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            area_code=area_code,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_lat_lng_elevation(self,
                              lat_greater=None, lat_less=None,
@@ -420,37 +444,43 @@ class SearchEngine(object):
                              sort_by=fields.postalcode,
                              ascending=True,
                              returns=DEFAULT_LIMIT):
-        return self.find(lat_greater=lat_greater,
-                         lat_less=lat_less,
-                         lng_greater=lng_greater,
-                         lng_less=lng_less,
-                         elevation_greater=elevation_greater,
-                         elevation_less=elevation_less,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            lat_greater=lat_greater,
+            lat_less=lat_less,
+            lng_greater=lng_greater,
+            lng_less=lng_less,
+            elevation_greater=elevation_greater,
+            elevation_less=elevation_less,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_population(self,
                       population_greater=None, population_less=None,
                       sort_by=fields.postalcode,
                       ascending=True,
                       returns=DEFAULT_LIMIT):
-        return self.find(population_greater=population_greater,
-                         population_less=population_less,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            population_greater=population_greater,
+            population_less=population_less,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_dwellings(self,
                      dwellings_greater=None, dwellings_less=None,
                      sort_by=fields.postalcode,
                      ascending=True,
                      returns=DEFAULT_LIMIT):
-        return self.find(dwellings_greater=dwellings_greater,
-                         dwellings_less=dwellings_less,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            dwellings_greater=dwellings_greater,
+            dwellings_less=dwellings_less,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_timezone(self,
                     timezone=None,
@@ -458,18 +488,40 @@ class SearchEngine(object):
                     sort_by=fields.postalcode,
                     ascending=True,
                     returns=DEFAULT_LIMIT):
-        return self.find(timezone=timezone,
-                         timezone_greater=timezone_greater,
-                         timezone_less=timezone_less,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            timezone=timezone,
+            timezone_greater=timezone_greater,
+            timezone_less=timezone_less,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
 
     def by_day_light_savings(self, day_light_savings,
                              sort_by=fields.postalcode,
                              ascending=True,
                              returns=DEFAULT_LIMIT):
-        return self.find(day_light_savings=day_light_savings,
-                         sort_by=sort_by,
-                         ascending=ascending,
-                         returns=returns)
+        return self.find(
+            day_light_savings=day_light_savings,
+            sort_by=sort_by,
+            ascending=ascending,
+            returns=returns,
+        )
+
+    def all_postalcode(self,
+                       sort_by=fields.postalcode,
+                       ascending=True,
+                       returns=DEFAULT_LIMIT):
+        return self.find(
+            sort_by=fields.postalcode,
+            ascending=True,
+            returns=DEFAULT_LIMIT,
+        )
+
+    def random(self, returns=DEFAULT_LIMIT):
+        sql = select([t.c.postalcode])
+        all_postalcode = [row[0] for row in self.connect.execute(sql)]
+        result = list()
+        for postalcode in random.sample(all_postalcode, returns):
+            result.append(self.by_postalcode(postalcode))
+        return result

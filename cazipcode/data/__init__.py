@@ -49,7 +49,8 @@ t = Table("canada_postalcode", metadata,
 db_file = "data.sqlite"
 db_path = os.path.join(os.path.dirname(__file__), db_file)
 
-json_data_path = os.path.join(os.path.dirname(__file__), "canada_postalcode.json.gz")
+json_data_path = os.path.join(os.path.dirname(
+    __file__), "canada_postalcode.json.gz")
 
 # if exists
 if os.path.exists(db_path):
@@ -59,7 +60,7 @@ if os.path.exists(db_path):
 else:
     postalcode_data = json.load(json_data_path, verbose=False)
     postalcode_data = sorted(postalcode_data, key=lambda p: p["postalcode"])
-    
+
     # try to create a database file locally.
     try:
         engine = create_engine("sqlite:///%s" % db_path)

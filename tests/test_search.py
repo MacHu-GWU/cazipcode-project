@@ -199,6 +199,23 @@ class TestSearchEngine:
             assert p.day_light_savings == True
         assert len(result) == DEFAULT_LIMIT
 
+    def test_by_postalcode(self):
+        postalcode = "K1G 0A1"
+        p = self.search.by_postalcode(postalcode)
+        assert p.postalcode == postalcode
+
+    def test_all_postalcode(self):
+        result = self.search.all_postalcode(
+            sort_by=fields.postalcode, ascending=True)
+        postalcode_array = list()
+        for p in result:
+            postalcode_array.append(p.postalcode)
+        assert_is_all_ascending(postalcode_array)
+
+    def test_random(self):
+        result = self.search.random()
+        assert len(result) == DEFAULT_LIMIT
+
 
 if __name__ == "__main__":
     import os

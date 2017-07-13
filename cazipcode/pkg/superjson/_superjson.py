@@ -9,7 +9,6 @@ import zlib
 import base64
 import shutil
 import inspect
-from six import PY2, PY3, add_metaclass, string_types, iteritems
 
 from collections import OrderedDict, deque
 from datetime import date, datetime
@@ -21,11 +20,13 @@ try:
     from .comments import strip_comments
     from .warning import logger, WARN_MSG, prt_console
     from .util import write, read
+    from .pkg.six import PY2, PY3, add_metaclass, string_types, iteritems
 except:
     from superjson import compresslib
     from superjson.comments import strip_comments
     from superjson.warning import logger, WARN_MSG, prt_console
     from superjson.util import write, read
+    from superjson.pkg.six import PY2, PY3, add_metaclass, string_types, iteritems
 
 try:
     import numpy as np

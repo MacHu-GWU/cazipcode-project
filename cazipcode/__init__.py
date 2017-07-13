@@ -12,5 +12,5 @@ __author__ = "Sanhe Hu"
 
 try:
     from .search import fields, SearchEngine
-except ImportError:
+except:
     pass

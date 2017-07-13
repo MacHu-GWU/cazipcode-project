@@ -13,7 +13,22 @@ import inspect
 from collections import OrderedDict, deque
 from datetime import date, datetime
 from base64 import b64encode, b64decode
-from dateutil.parser import parse
+
+
+try:
+    from dateutil.parser import parse
+except:
+    pass
+
+try:
+    import numpy as np
+except:
+    pass
+
+try:
+    import pandas as pd
+except:
+    pass
 
 try:
     from . import compresslib
@@ -27,16 +42,6 @@ except:
     from superjson.warning import logger, WARN_MSG, prt_console
     from superjson.util import write, read
     from superjson.pkg.six import PY2, PY3, add_metaclass, string_types, iteritems
-
-try:
-    import numpy as np
-except:
-    pass
-
-try:
-    import pandas as pd
-except:
-    pass
 
 
 def get_class_name(obj):

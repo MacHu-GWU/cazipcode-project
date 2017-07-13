@@ -5,7 +5,6 @@ import random
 import heapq
 from math import radians, cos
 from functools import total_ordering
-from six import string_types
 from sqlalchemy import select, func, and_
 
 try:
@@ -15,6 +14,7 @@ try:
     )
     from .pkg.nameddict import Base
     from .pkg.geo_search import great_circle
+    from .pkg.six import string_types
 except:
     from cazipcode.data import (
         engine, t,
@@ -22,6 +22,7 @@ except:
     )
     from cazipcode.pkg.nameddict import Base
     from cazipcode.pkg.geo_search import great_circle
+    from cazipcode.pkg.six import string_types
 
 
 @total_ordering

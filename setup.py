@@ -78,6 +78,12 @@ except:
     print("'requirements.txt' not found!")
     REQUIRES = list()
 
+path = os.path.join(NAME, "data", "data.sqlite")
+try:
+    os.remove(path)
+except:
+    pass
+
 setup(
     name=NAME,
     description=SHORT_DESCRIPTION,

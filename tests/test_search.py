@@ -6,8 +6,7 @@ elementary_path unittest.
 """
 
 import pytest
-from cazipcode import fields, SearchEngine
-from cazipcode.search import great_circle, DEFAULT_LIMIT
+from cazipcode.search import fields, SearchEngine, great_circle, DEFAULT_LIMIT
 
 
 def assert_is_all_ascending(array):

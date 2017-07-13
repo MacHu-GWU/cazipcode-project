@@ -5,13 +5,12 @@
 
 """
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __short_description__ = "Powerful Canada zipcode search engine."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
 
 try:
-    from .data import fields
-    from .search import SearchEngine
+    from .search import great_circle, fields, PostalCode, SearchEngine
 except:
     pass

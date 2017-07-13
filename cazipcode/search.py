@@ -8,13 +8,17 @@ from six import string_types
 from sqlalchemy import select, func, and_
 
 try:
-    from .data import engine, t
-    from .data import find_province, find_city, find_area_name, fields
+    from .data import (
+        engine, t,
+        find_province, find_city, find_area_name, fields,
+    )
     from .pkg.nameddict import Base
     from .pkg.geo_search import great_circle
 except:
-    from cazipcode.data import engine, t
-    from cazipcode.data import find_province, find_city, find_area_name, fields
+    from cazipcode.data import (
+        engine, t,
+        find_province, find_city, find_area_name, fields,
+    )
     from cazipcode.pkg.nameddict import Base
     from cazipcode.pkg.geo_search import great_circle
 

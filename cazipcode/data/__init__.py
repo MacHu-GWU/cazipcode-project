@@ -6,11 +6,11 @@ from sqlalchemy import String, Integer, Float
 from sqlalchemy import create_engine, MetaData, Table, Column, Index
 from sqlalchemy import select
 try:
-    from cazipcode.pkg.superjson import json
-    from cazipcode.pkg.fuzzywuzzy import process
-except:
     from ..pkg.superjson import json
     from ..pkg.fuzzywuzzy import process
+except:
+    from cazipcode.pkg.superjson import json
+    from cazipcode.pkg.fuzzywuzzy import process
 
 
 class fields:

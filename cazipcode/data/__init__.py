@@ -13,7 +13,7 @@ except:
     from cazipcode.pkg.fuzzywuzzy import process
 
 
-class fields:
+class fields(object):
     postalcode = "postalcode"
     city = "city"
     province = "province"
@@ -59,6 +59,7 @@ if os.path.exists(db_path):
 else:
     postalcode_data = json.load(json_data_path, verbose=False)
     postalcode_data = sorted(postalcode_data, key=lambda p: p["postalcode"])
+    
     # try to create a database file locally.
     try:
         engine = create_engine("sqlite:///%s" % db_path)

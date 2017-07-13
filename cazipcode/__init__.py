@@ -11,6 +11,7 @@ __license__ = "MIT"
 __author__ = "Sanhe Hu"
 
 try:
-    from .search import fields, SearchEngine
+    from .data import fields
+    from .search import SearchEngine
 except:
     pass
